@@ -5,7 +5,7 @@ metadata:
   labels:
     app: runner
 spec:
-  replicas: 1 # Default from docker-compose.yml: ${RUNNER_REPLICAS:-2}
+  replicas: 1
   selector:
     matchLabels:
       app: runner
@@ -20,11 +20,6 @@ spec:
           env:
             - name: REPO_URL
               value: "https://github.com/YOUR_GH_OWNER/YOUR_GH_REPO" # Placeholder
-            - name: ACCESS_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: github-runner-secret
-                  key: access-token
             - name: RUNNER_SCOPE
               value: "repo"
             - name: LABELS
@@ -33,4 +28,10 @@ spec:
             limits:
               memory: "512Mi"
               cpu: "500m"
-
+          volumeMounts:
+            - name: docker-sock
+              mountPath: /var/run/docker.sock
+      volumes:
+        - name: docker-sock
+          hostPath:
+            path: /var/run/docker.sock

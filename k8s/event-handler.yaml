@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-handler
+  labels:
+    app: event-handler
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: event-handler
+  template:
+    metadata:
+      labels:
+        app: event-handler
+    spec:
+      containers:
+        - name: event-handler
+          image: stephengpope/thepopebot:event-handler-latest # Using default from docker-compose.yml
+          ports:
+            - containerPort: 80 # Service is exposed on port 80 based on Traefik label
+          env:
+            - name: APP_HOSTNAME
+              value: "your.app.hostname.com" # Placeholder, this should be set in a ConfigMap/Secret
+          livenessProbe:
+            exec:
+              command: ["curl", "-f", "http://localhost:80/api/ping"]
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          readinessProbe:
+            exec:
+              command: ["curl", "-f", "http://localhost:80/api/ping"]
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: event-handler
+  labels:
+    app: event-handler
+spec:
+  type: ClusterIP
+  selector:
+    app: event-handler
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: event-handler-ingress
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+    # Uncomment the following lines to enable TLS via Let's Encrypt:
+    # traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    # traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
+  labels:
+    app: event-handler
+spec:
+  rules:
+    - host: "your.app.hostname.com" # Placeholder for APP_HOSTNAME
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: event-handler
+                port:
+                  number: 80

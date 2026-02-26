@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: runner
+  labels:
+    app: runner
+spec:
+  replicas: 2 # Default from docker-compose.yml: ${RUNNER_REPLICAS:-2}
+  selector:
+    matchLabels:
+      app: runner
+  template:
+    metadata:
+      labels:
+        app: runner
+    spec:
+      containers:
+        - name: runner
+          image: myoung34/github-runner:latest
+          env:
+            - name: REPO_URL
+              value: "https://github.com/YOUR_GH_OWNER/YOUR_GH_REPO" # Placeholder
+            - name: ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: github-runner-secret
+                  key: access-token
+            - name: RUNNER_SCOPE
+              value: "repo"
+            - name: LABELS
+              value: "self-hosted"
+          volumeMounts:
+            - name: docker-sock
+              mountPath: /var/run/docker.sock
+      volumes:
+        - name: docker-sock
+          hostPath:
+            path: /var/run/docker.sock
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: github-runner-secret
+type: Opaque
+stringData:
+  access-token: "YOUR_GITHUB_ACCESS_TOKEN" # Replace with your GitHub Personal Access Token

@@ -5,7 +5,7 @@ metadata:
   labels:
     app: runner
 spec:
-  replicas: 2 # Default from docker-compose.yml: ${RUNNER_REPLICAS:-2}
+  replicas: 1 # Default from docker-compose.yml: ${RUNNER_REPLICAS:-2}
   selector:
     matchLabels:
       app: runner
@@ -29,18 +29,8 @@ spec:
               value: "repo"
             - name: LABELS
               value: "self-hosted"
-          volumeMounts:
-            - name: docker-sock
-              mountPath: /var/run/docker.sock
-      volumes:
-        - name: docker-sock
-          hostPath:
-            path: /var/run/docker.sock
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: github-runner-secret
-type: Opaque
-stringData:
-  access-token: "YOUR_GITHUB_ACCESS_TOKEN" # Replace with your GitHub Personal Access Token
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+

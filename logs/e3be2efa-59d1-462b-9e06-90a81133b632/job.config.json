@@ -1,0 +1,4 @@
+{
+  "title": "Create 'demo.md' with \"This is a demonstration file\" content and commit.",
+  "job": "Create a new file named `demo.md` in the root directory of the repository. Add the content \"This is a demonstration file created by the autonomous agent.\" to it. Then, commit this change to the repository."
+}

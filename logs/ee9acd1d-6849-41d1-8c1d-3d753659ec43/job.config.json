@@ -1,0 +1,4 @@
+{
+  "title": "Create a new TypeScript file at `scripts/fetchPolymarket.ts`.",
+  "job": "Create a new TypeScript file at `scripts/fetchPolymarket.ts`.\nThis script should:\n1. Use the `fetch` API to make a GET request to `https://gamma-api.polymarket.com/events?limit=5`.\n2. Parse the JSON response.\n3. For each event in the response, extract its `title` and the `probability` of its top outcome. The top outcome is the one with the highest probability.\n4. Construct a clean, formatted string for each event, including its title and the top outcome's probability. The string for each event must be under 280 characters.\n5. `console.log` each formatted string.\n6. Commit and push the new `scripts/fetchPolymarket.ts` file to the repository."
+}

@@ -1,0 +1,4 @@
+{
+  "title": "Register GitHub webhook and save response to repository",
+  "job": "Execute a curl POST request to register a webhook on the GitHub repository.\n\nUse the following command:\ncurl -X POST \\\n  -H \"Accept: application/vnd.github+json\" \\\n  -H \"Authorization: Bearer $GH_TOKEN\" \\\n  -H \"X-GitHub-Api-Version: 2022-11-28\" \\\n  -d '{\"name\":\"web\",\"active\":true,\"events\":[\"push\",\"pull_request\",\"issue_comment\"],\"config\":{\"url\":\"https://955e-34-45-177-168.ngrok-free.app/api/webhook/github\",\"content_type\":\"json\",\"insecure_ssl\":\"0\"}}' \\\n  https://api.github.com/repos/StarkDopeDaemon/Dopebot/hooks\n\nCapture the full JSON response from GitHub and write it to a file named `webhook-registration-response.json` in the root directory of the repository.\n\nThen commit this file with the message \"docs: GitHub webhook registration response\"."
+}

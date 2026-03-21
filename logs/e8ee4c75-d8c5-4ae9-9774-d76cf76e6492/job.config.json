@@ -1,0 +1,4 @@
+{
+  "title": "Browser-use Testing and Documentation Agent",
+  "job": "1. Run `browser-use --help` in the my-agent folder and capture the output to see available commands.\n\n2. Read the contents of `main.py` in the my-agent folder to understand how browser-use is configured and used.\n\n3. Create a simple test using browser-use. For example, test it by having it navigate to a website (like google.com) and perform a simple action (like searching for \"test\").\n\n4. Save all outputs (help output, main.py contents, and test results) to a file named `browser-use-test-results.md` in the root directory.\n\n5. Commit this file with the message \"test: Browser-use testing and exploration\"."
+}
